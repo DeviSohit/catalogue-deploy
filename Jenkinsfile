@@ -1,14 +1,13 @@
 pipeline {
     agent { node { label 'AGENT-1' } } 
-
+    parameters {
+        string(name: 'version', defaultValue: '1.0.1', description: 'Which version to Deploy')
+    }
     stages {
-        stage('Get version'){
+        stage('Deploy'){
             steps{
-                script{
-                    def packageJson = readJSON(file: 'package.json')
-                    packageVersion = packageJson.version
-                    echo "version: ${packageVersion}"
-                }
+                echo "Deploying..."
+                echo "Version from params: ${params.version}"
             }
         }
         
