@@ -51,6 +51,14 @@ pipeline {
                 """
             }
         }
+        stage('Destroy'){
+            steps{
+                sh """
+                cd terraform
+                terraform destroy -var="app_version=${params.version}" -auto-approve
+                """
+            }
+        }
         
     }
 
