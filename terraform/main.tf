@@ -5,6 +5,7 @@ module "catalogue_instance" {
   vpc_security_group_ids = [data.aws_ssm_parameter.catalogue_sg_id.value]
   # it should be in Roboshop private subnet
   subnet_id = element(split(",",data.aws_ssm_parameter.private_subnet_ids.value), 0)
+  iam_instance_profile = "catalogue-profile-${var.env}"
   //user_data = file("catalogue.sh")
   tags = merge(
     {
@@ -39,7 +40,7 @@ resource "null_resource" "cluster" {
     # Bootstrap script called with private_ip of each node in the cluster
     inline = [
       "chmod +x /tmp/catalogue.sh",
-      "sudo sh /tmp/catalogue.sh ${var.app_version}"
+      "sudo sh /tmp/catalogue.sh ${var.app_version} ${var.env}"
     ]
   }
 }
